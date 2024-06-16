@@ -1,0 +1,5 @@
+/* Define your styles here */
+
+.candidate-photo {
+    object-fit: contain;
+}

@@ -1,0 +1,25 @@
+<fetchPlans xmlns="http://jmix.io/schema/core/fetch-plans">
+    <fetchPlan entity="Candidate" name="candidate-by-vacancy">
+        <property name="name"/>
+        <property name="surname"/>
+        <property name="patronymic"/>
+    </fetchPlan>
+    <fetchPlan entity="Candidate" name="candidate-by-email">
+        <property name="name"/>
+        <property name="surname"/>
+        <property name="patronymic"/>
+        <property name="phone"/>
+        <property name="email"/>
+        <property name="age"/>
+        <property name="experience"/>
+        <property name="salary"/>
+        <property name="vacancy">
+            <property name="name"/>
+        </property>
+        <property name="candidateStatus"/>
+    </fetchPlan>
+    <fetchPlan entity="User" name="user-with-role-hr">
+        <property name="firstName"/>
+        <property name="lastName"/>
+    </fetchPlan>
+</fetchPlans>

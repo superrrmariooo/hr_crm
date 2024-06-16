@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://vacancyListView.title"
+      focusComponent="vacanciesDataGrid">
+    <data>
+        <collection id="vacanciesDc"
+                    class="com.company.hr_crm.entity.Vacancy">
+            <fetchPlan extends="_base">
+                <property name="author" fetchPlan="_base"/>
+                <property name="interviewer" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="vacanciesDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Vacancy e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <genericFilter component="genericFilter"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <layout>
+        <genericFilter id="genericFilter"
+                       dataLoader="vacanciesDl" opened="false" summaryText="msg://genericFilter.summaryText">
+            <properties include=".*"/>
+        </genericFilter>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <button id="createBtn" action="vacanciesDataGrid.create" text="msg://createVacancyBtn.text"/>
+            <button id="editBtn" action="vacanciesDataGrid.edit" text="msg://editBtn.text"/>
+            <button id="loadBtn"
+                    text="msg://loadVacanciesBtn.text"
+                    icon="vaadin:cloud-download"
+                    themeNames="primary success"
+                    action="vacanciesDataGrid.excelExport"/>
+            <simplePagination id="pagination"
+                              dataLoader="vacanciesDl"
+                              itemsPerPageDefaultValue="10"
+                              autoLoad="true"/>
+        </hbox>
+        <dataGrid id="vacanciesDataGrid"
+                  width="100%"
+                  minHeight="20em"
+                  dataContainer="vacanciesDc">
+            <actions>
+                <action id="create" type="list_create"/>
+                <action id="edit" type="list_edit"/>
+                <action id="excelExport" type="grdexp_excelExport"/>
+            </actions>
+            <columns resizable="true">
+                <column property="name"/>
+                <column property="department"/>
+                <column property="author"/>
+                <column property="interviewer"/>
+                <column property="vacancyStatus" textAlign="CENTER"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectBtn" action="selectAction" text="msg://selectBtn.text"/>
+            <button id="discardBtn" action="discardAction" text="msg://discardBtn.text"/>
+        </hbox>
+    </layout>
+</view>

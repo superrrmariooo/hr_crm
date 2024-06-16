@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://candidateListView.title"
+      focusComponent="candidatesDataGrid">
+    <data>
+        <collection id="candidatesDc"
+                    class="com.company.hr_crm.entity.Candidate">
+            <fetchPlan extends="_base">
+                <property name="vacancy" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="candidatesDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Candidate e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <genericFilter component="genericFilter"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <layout>
+        <genericFilter id="genericFilter"
+                       dataLoader="candidatesDl" opened="false" summaryText="msg://genericFilter.summaryText">
+            <properties include=".*"/>
+        </genericFilter>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <button id="createBtn" action="candidatesDataGrid.create" text="msg://createCandidateBtn.text"/>
+            <button id="editBtn" action="candidatesDataGrid.edit" text="msg://editCandidateBtn.text"/>
+            <button id="removeBtn" action="candidatesDataGrid.remove" text="msg://removeCandidateBtn.text"/>
+            <button id="loadBtn"
+                    text="msg://loadCandidatesBtn.text"
+                    icon="vaadin:cloud-download"
+                    themeNames="primary success" action="candidatesDataGrid.excelExport"/>
+            <simplePagination id="pagination"
+                              dataLoader="candidatesDl"
+                              itemsPerPageDefaultValue="10"
+                              autoLoad="true"/>
+        </hbox>
+        <dataGrid id="candidatesDataGrid"
+                  width="100%"
+                  minHeight="20em"
+                  dataContainer="candidatesDc"
+                  columnReorderingAllowed="true">
+            <actions>
+                <action id="create" type="list_create"/>
+                <action id="edit" type="list_edit"/>
+                <action id="remove" type="list_remove"/>
+                <action id="excelExport" type="grdexp_excelExport"/>
+            </actions>
+            <columns resizable="true">
+                <column key="photo" sortable="false" flexGrow="0" resizable="false"/>
+                <column property="name"/>
+                <column property="surname"/>
+                <column property="age"/>
+                <column property="experience"/>
+                <column property="salary"/>
+                <column property="vacancy"/>
+                <column property="candidateStatus" textAlign="CENTER"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectBtn" action="selectAction"/>
+            <button id="discardBtn" action="discardAction"/>
+        </hbox>
+    </layout>
+</view>
+

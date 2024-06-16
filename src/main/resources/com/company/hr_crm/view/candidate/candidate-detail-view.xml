@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://candidateDetailView.title"
+      focusComponent="form">
+    <data>
+        <collection id="commentsDc" class="com.company.hr_crm.entity.Comment">
+            <loader id="commentsDl">
+                <query>
+                    <![CDATA[select e from Comment_ e
+                    where e.candidate = :candidate
+                    order by e.dataTime desc]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base">
+                <property name="author">
+                    <property name="firstName"/>
+                    <property name="username"/>
+                </property>
+            </fetchPlan>
+        </collection>
+        <instance id="candidateDc"
+                  class="com.company.hr_crm.entity.Candidate">
+            <fetchPlan extends="_base">
+                <property fetchPlan="_base" name="vacancy"/>
+            </fetchPlan>
+            <loader/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout margin="false">
+        <tabSheet width="100%">
+            <tab id="tab1" label="msg://tab1.label">
+                <formLayout id="form" dataContainer="candidateDc" width="100%">
+                    <textField id="surnameField" property="surname">
+                        <validators>
+                            <regexp regexp="^[aA-zZаА-яЯ\s-]*$" message="msg://surnameRegexp.message"/>
+                        </validators>
+                    </textField>
+                    <textField id="nameField" property="name">
+                        <validators>
+                            <regexp regexp="^[aA-zZаА-яЯ\s-]*$" message="msg://nameRegexp.message"/>
+                        </validators>
+                    </textField>
+                    <textField id="patronymicField" property="patronymic">
+                        <validators>
+                            <regexp regexp="^[aA-zZаА-яЯ\s-]*$" message="msg://patronymicRegexp.message"/>
+                        </validators>
+                    </textField>
+                    <textField id="ageField" property="age" label="msg://ageField.label">
+                        <validators>
+                            <min value="16" message="msg://ageMin.message"/>
+                            <max value="90" message="msg://ageMax.message"/>
+                        </validators>
+                    </textField>
+                    <textField id="experienceField" property="experience" label="msg://experienceField.label">
+                        <validators>
+                            <min value="0" message="msg://expMin.message"/>
+                            <max value="500" message="msg://expMax.message"/>
+                        </validators>
+                    </textField>
+                    <textField id="salaryField" property="salary" label="msg://salaryField.label">
+                        <validators>
+                            <min value="5000" message="msg://salaryMin.message"/>
+                            <max value="1000000" message="msg://salaryMax.message"/>
+                        </validators>
+                    </textField>
+                    <textField id="phoneField" property="phone">
+                        <validators>
+                            <regexp regexp="^((8|\+374|\+994|\+995|\+375|\+7|\+380|\+38|\+996|\+998|\+993)[\- ]?)?\(?\d{3,5}\)?[\- ]?\d{1}[\- ]?\d{1}[\- ]?\d{1}[\- ]?\d{1}[\- ]?\d{1}(([\- ]?\d{1})?[\- ]?\d{1})?$"
+                                    message="msg://phoneRegexp.message"/>
+                        </validators>
+                    </textField>
+                    <textField id="emailField" property="email">
+                        <validators>
+                            <email message="msg://emailRegexp.message"/>
+                        </validators>
+                    </textField>
+                    <entityPicker id="vacancyField" property="vacancy">
+                        <actions>
+                            <action id="entityLookup" type="entity_lookup"/>
+                            <action id="entityClear" type="entity_clear"/>
+                        </actions>
+                    </entityPicker>
+                    <select id="candidateStatusField" property="candidateStatus">
+                    </select>
+                    <hbox>
+                        <image id="image" property="photo" dataContainer="candidateDc" height="10em" width="10em"
+                               classNames="candidate-photo">
+                        </image>
+                        <fileStorageUploadField id="photoField" property="photo" dataContainer="candidateDc"
+                                                uploadText="msg://photoField.uploadText"/>
+                    </hbox>
+                    <hbox id="detailActions">
+                        <button id="saveAndCloseBtn" action="saveAction" text="msg://saveAndCloseBtn.text"/>
+                        <button id="closeBtn" action="closeAction" text="msg://closeBtn.text"/>
+                    </hbox>
+                </formLayout>
+            </tab>
+            <tab id="tab2" label="msg://tab2.label">
+                <vbox>
+                    <hbox>
+                        <button id="commentButton"
+                                text="msg://addCommentButton.text"
+                                icon="vaadin:comment-o"
+                                themeNames="primary" visible="true"/>
+                        <button id="editButton"
+                                action="commentsDataGrid2.edit"
+                                text="msg://editCommentButton.text"
+                                icon="vaadin:pencil" visible="false"/>
+                        <button id="deleteButton"
+                                action="commentsDataGrid2.remove"
+                                text="msg://deleteButton.text"
+                                icon="vaadin:trash"
+                                themeNames="error" visible="false"/>
+                    </hbox>
+                    <dataGrid dataContainer="commentsDc" id="commentsDataGrid2"
+                              themeNames="no-border no-row-borders row-stripes" allRowsVisible="true"
+                    >
+                        <actions showInContextMenuEnabled="false">
+                            <action id="edit" type="list_edit"/>
+                            <action id="remove" type="list_remove"/>
+                        </actions>
+                        <columns>
+                            <column property="author.firstName" sortable="false" header=" " flexGrow="0" autoWidth="true"   />
+                            <column property="dataTime" sortable="false" header=" " flexGrow="0" autoWidth="true"/>
+                            <column property="text" sortable="false" header=" "/>
+                        </columns>
+                    </dataGrid>
+                </vbox>
+            </tab>
+        </tabSheet>
+    </layout>
+</view>
+

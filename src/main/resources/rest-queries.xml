@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<queries xmlns="http://jmix.io/schema/rest/queries">
+    <query name="candidateByVacancy" entity="Candidate" fetchPlan="candidate-by-vacancy">
+        <jpql><![CDATA[select e from Candidate e where e.vacancy.name = :vacancy]]></jpql>
+        <params>
+            <param name="vacancy" type="java.lang.String"/>
+        </params>
+    </query>
+    <query name="candidateByEmail" entity="Candidate" fetchPlan="candidate-by-email">
+        <jpql><![CDATA[select e from Candidate e where e.email = :email]]></jpql>
+        <params>
+            <param name="email" type="java.lang.String"/>
+        </params>
+    </query>
+    <query name="userWithRoleHr" entity="User" fetchPlan="user-with-role-hr">
+        <jpql><![CDATA[select e from User e where e.role = 'HR' or e.role = 'JUN_HR']]></jpql>
+    </query>
+</queries>

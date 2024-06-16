@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://vacancyDetailView.title"
+      focusComponent="form">
+    <data>
+        <collection id="candidatesDc" class="com.company.hr_crm.entity.Candidate">
+            <loader id="candidatesDl">
+                <query>
+                    <![CDATA[select e from Candidate e
+                    where e.vacancy = :vacancy  ]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base"/>
+        </collection>
+        <instance id="vacancyDc"
+                  class="com.company.hr_crm.entity.Vacancy">
+            <fetchPlan extends="_base">
+                <property name="author" fetchPlan="_base"/>
+                <property name="interviewer" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="vacancyDc">
+            <textField id="nameField" property="name"/>
+            <textField id="departmentField" property="department"/>
+            <entityPicker id="authorField" property="author">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <entityPicker id="interviewerField" property="interviewer">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <select id="vacancyStatusField" property="vacancyStatus"/>
+        </formLayout>
+        <hbox id="detailActions">
+            <button id="saveAndCloseBtn" action="saveAction" text="msg://saveAndCloseVacancyBtn.text"/>
+            <button id="closeBtn" action="closeAction" text="msg://closeVacancyBtn.text"/>
+        </hbox>
+        <dataGrid dataContainer="candidatesDc" width="100%" id="candidatesDataGrid">
+            <actions>
+                <action id="edit" type="list_edit"/>
+            </actions>
+            <columns>
+                <column key="photo" sortable="false" flexGrow="0" resizable="false"/>
+                <column property="surname"/>
+                <column property="name"/>
+                <column property="age"/>
+                <column property="experience"/>
+                <column property="salary"/>
+                <column property="candidateStatus" textAlign="CENTER"/>
+            </columns>
+        </dataGrid>
+    </layout>
+</view>
